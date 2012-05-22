@@ -19,17 +19,19 @@ class programmButtonPlugin(QPyDesignerCustomWidgetPlugin):
     """
 
     def __init__(self, parent=None):
-        QPyDesignerCustomWidgetPlugin.__init__(self, parent)
+#        QPyDesignerCustomWidgetPlugin.__init__(self, parent)
+        super(programmButtonPlugin, self).__init__(parent)
         self.initialized = False
 
 
     def initialize(self, formEditor):
-
       if self.initialized:
           return
-
       self.initialized = True
-      
+
+    def isInitialized(self):
+        return self.initialized
+
     def createWidget(self, parent):
         # метод должен вернуть экземпляр класса нашего виджета
         # вот тут и пригодилось согласование с принятым в Qt4 API
@@ -65,10 +67,10 @@ class programmButtonPlugin(QPyDesignerCustomWidgetPlugin):
         # минимально -- класс и имя экземпляра класса
         # вставляется в .ui
         return "<widget class=\"QProgrammButton\" name=\"programmButton\">\n"\
-               "    <property name=\"green\">\n"\
-               "        <bool>false</bool>\n"\
-               "    </property>\n"\
                "</widget>\n" \
+#               "    <property name=\"green\">\n"\
+#               "        <bool>false</bool>\n"\
+#               "    </property>\n"\
 
     def includeFile(self):
         # возвращает имя модуля, в котором хранится наш виджет
