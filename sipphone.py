@@ -29,8 +29,10 @@ class SIPPhone(QtGui.QMainWindow):
     QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("clicked()"), self.test )
 
 
+
   def test(self):
-     self.programmButton.setGreen(not self.programmButton.getGreen())
+     #self.programmButton.setGreen(not self.programmButton.getGreen())
+     self.programmButton.greenLed = not self.programmButton.greenLed
      print "test", self.programmButton.green
 
   def digit_key_pressed(self, par1):
