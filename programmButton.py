@@ -14,6 +14,7 @@ class QProgrammButton(QtGui.QPushButton):
     def __init__(self, parent = None):
         super(QProgrammButton, self).__init__(parent)
         self.green = False
+        self.red = False
         
            
     def paintEvent(self, e):
@@ -59,6 +60,26 @@ class QProgrammButton(QtGui.QPushButton):
             self.update()
 
     greenLed = QtCore.pyqtProperty (bool, getGreen, setGreen, resetGreen)
+    
+    def getRed(self):
+        return self.red
+
+    @QtCore.pyqtSlot(bool)
+    def setRed(self, value):
+        print "setRed", value
+        if self.red != value:
+            self.red = value
+            self.emit(QtCore.SIGNAL("redChanged(bool)"), value)
+            self.update()
+
+    def resetRed(self):
+        if self.red:
+            self.red = False
+            self.emit(QtCore.SIGNAL("redChanged(bool)"), value)
+            self.update()
+
+    redLed = QtCore.pyqtProperty (bool, getRed, setRed, resetRed)
+
 
 if __name__ == "__main__":
 
