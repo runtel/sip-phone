@@ -24,6 +24,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPlainTextEdit" name="plainTextEditDisplay">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -255,19 +258,138 @@
      <rect>
       <x>180</x>
       <y>140</y>
-      <width>131</width>
+      <width>211</width>
       <height>171</height>
      </rect>
     </property>
     <property name="title">
      <string/>
     </property>
+    <widget class="QPushButton" name="pushButton_CmdClear">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>10</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>clear</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_CmdRedial">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>40</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>redial</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_CmdConf">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>130</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>conf</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_CmdCancel">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>130</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>cancel</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_CmdBackspace">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>&lt;---</string>
+     </property>
+    </widget>
+    <widget class="QStatusCmdButton" name="pushButton_CmdRecord">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>70</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>record</string>
+     </property>
+    </widget>
+    <widget class="QStatusCmdButton" name="pushButton_CmdDND">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>100</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>dnd</string>
+     </property>
+    </widget>
+    <widget class="QStatusCmdButton" name="pushButton_CmdMute">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>70</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>mute</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxProgrammButton">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>-10</y>
+      <x>390</x>
+      <y>0</y>
       <width>161</width>
       <height>321</height>
      </rect>
@@ -594,11 +716,14 @@
    <widget class="QProgrammButton" name="programmButton">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>120</y>
+      <x>630</x>
+      <y>60</y>
       <width>42</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="green" stdset="0">
      <bool>true</bool>
@@ -607,11 +732,14 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>210</y>
+      <x>610</x>
+      <y>130</y>
       <width>75</width>
       <height>25</height>
      </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
     </property>
     <property name="text">
      <string>PushButton</string>
@@ -644,6 +772,11 @@
    <class>QProgrammButton</class>
    <extends>QPushButton</extends>
    <header>programmButton</header>
+  </customwidget>
+  <customwidget>
+   <class>QStatusCmdButton</class>
+   <extends>QPushButton</extends>
+   <header>statusCmdButton</header>
   </customwidget>
  </customwidgets>
  <resources/>
