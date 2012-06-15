@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>695</width>
-    <height>370</height>
+    <width>708</width>
+    <height>343</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,8 +31,8 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>301</width>
-      <height>131</height>
+      <width>261</width>
+      <height>101</height>
      </rect>
     </property>
     <property name="inputMethodHints">
@@ -51,8 +51,8 @@
    <widget class="QGroupBox" name="groupBoxDigit">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>140</y>
+      <x>10</x>
+      <y>110</y>
       <width>131</width>
       <height>171</height>
      </rect>
@@ -256,19 +256,22 @@
    <widget class="QGroupBox" name="groupBoxSystem">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>140</y>
-      <width>211</width>
+      <x>150</x>
+      <y>110</y>
+      <width>291</width>
       <height>171</height>
      </rect>
     </property>
     <property name="title">
      <string/>
     </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
     <widget class="QPushButton" name="pushButton_CmdClear">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>10</y>
        <width>75</width>
        <height>25</height>
@@ -284,7 +287,7 @@
     <widget class="QPushButton" name="pushButton_CmdRedial">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>40</y>
        <width>75</width>
        <height>25</height>
@@ -300,7 +303,7 @@
     <widget class="QPushButton" name="pushButton_CmdConf">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>130</y>
        <width>75</width>
        <height>25</height>
@@ -313,43 +316,11 @@
       <string>conf</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_CmdCancel">
-     <property name="geometry">
-      <rect>
-       <x>90</x>
-       <y>130</y>
-       <width>75</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>cancel</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_CmdBackspace">
-     <property name="geometry">
-      <rect>
-       <x>90</x>
-       <y>10</y>
-       <width>75</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>&lt;---</string>
-     </property>
-    </widget>
     <widget class="QStatusCmdButton" name="pushButton_CmdRecord">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>70</y>
+       <x>100</x>
+       <y>100</y>
        <width>71</width>
        <height>25</height>
       </rect>
@@ -361,7 +332,7 @@
     <widget class="QStatusCmdButton" name="pushButton_CmdDND">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>100</y>
        <width>71</width>
        <height>25</height>
@@ -374,7 +345,7 @@
     <widget class="QStatusCmdButton" name="pushButton_CmdMute">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>10</x>
        <y>70</y>
        <width>71</width>
        <height>25</height>
@@ -384,14 +355,78 @@
       <string>mute</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_CmdHangUp">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>70</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>hangup</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_CmdDial">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>40</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>dial</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_CmdBackspace">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>10</y>
+       <width>75</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>&lt;---</string>
+     </property>
+    </widget>
+    <widget class="QStatusCmdButton" name="pushButton_CmdRegister">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>10</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>register</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxProgrammButton">
     <property name="geometry">
      <rect>
-      <x>390</x>
+      <x>440</x>
       <y>0</y>
       <width>161</width>
-      <height>321</height>
+      <height>281</height>
      </rect>
     </property>
     <property name="focusPolicy">
@@ -404,312 +439,384 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>10</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>0</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton1">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>20</y>
+       <y>10</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>1</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton3">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>20</y>
+       <y>10</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>2</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton6">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>40</y>
+       <y>30</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>5</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton4">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
+       <y>30</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>3</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton5">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>40</y>
+       <y>30</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>4</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton10">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
+       <y>70</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>9</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton12">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>80</y>
+       <y>70</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>11</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton7">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>50</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>6</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton8">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>60</y>
+       <y>50</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>7</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton9">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>60</y>
+       <y>50</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>8</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton11">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>80</y>
+       <y>70</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>10</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton122">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>160</y>
+       <y>150</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>21</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton18">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>120</y>
+       <y>110</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>17</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton20">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>140</y>
+       <y>130</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>19</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton13">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>100</y>
+       <y>90</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>12</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton23">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>160</y>
+       <y>150</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>22</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton15">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>100</y>
+       <y>90</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>14</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton14">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>100</y>
+       <y>90</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>13</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton21">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>140</y>
+       <y>130</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>20</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton17">
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>120</y>
+       <y>110</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>16</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton124">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>160</y>
+       <y>150</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>23</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton19">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>140</y>
+       <y>130</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>18</number>
      </property>
     </widget>
     <widget class="QProgrammButton" name="programmButton16">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>120</y>
+       <y>110</y>
        <width>42</width>
        <height>16</height>
       </rect>
      </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="numberButton" stdset="0">
+      <number>15</number>
      </property>
     </widget>
    </widget>
@@ -751,10 +858,16 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>695</width>
+     <width>708</width>
      <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuAaa">
+    <property name="title">
+     <string>aaa</string>
+    </property>
+   </widget>
+   <addaction name="menuAaa"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
