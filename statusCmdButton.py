@@ -7,7 +7,7 @@
 """
 
 import sys
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
 class QStatusCmdButton(QtGui.QPushButton):
     status = QtCore.pyqtSignal(bool)
