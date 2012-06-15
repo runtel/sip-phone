@@ -31,7 +31,7 @@ def installEventFilter(widget):
                     # левая кнопка мышки нажата
 		    if event.button() & QtCore.Qt.LeftButton:
         		self.clicked.emit(widget.numberButton)
-		        return True
+		        return False
 
                     # правая кнопка мышки нажата
 		    if event.button() & QtCore.Qt.RightButton:
