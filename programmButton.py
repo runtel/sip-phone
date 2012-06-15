@@ -6,16 +6,16 @@
 """
 
 import sys
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
 class QProgrammButton(QtGui.QPushButton):
     greenChanged = QtCore.pyqtSignal(bool)
 
     def __init__(self, parent = None):
         super(QProgrammButton, self).__init__(parent)
+	self.number = -1
         self.green = False
         self.red = False
-        
            
     def paintEvent(self, e):
         QtGui.QPushButton.paintEvent(self, e)
@@ -79,6 +79,19 @@ class QProgrammButton(QtGui.QPushButton):
             self.update()
 
     redLed = QtCore.pyqtProperty (bool, getRed, setRed, resetRed)
+    
+
+    # свойство порядковый номер
+    def getNumber(self):
+        return self.number
+
+    def setNumber(self, value):
+        self.number = value
+
+    def resetNumber(self):
+        self.number = -1
+
+    numberButton = QtCore.pyqtProperty (int, getNumber, setNumber, resetNumber)
 
 
 if __name__ == "__main__":
