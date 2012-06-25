@@ -31,7 +31,7 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>261</width>
+      <width>421</width>
       <height>101</height>
      </rect>
     </property>
@@ -325,6 +325,9 @@
        <height>25</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>record</string>
      </property>
@@ -338,6 +341,9 @@
        <height>25</height>
       </rect>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>dnd</string>
      </property>
@@ -350,6 +356,9 @@
        <width>71</width>
        <height>25</height>
       </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
      </property>
      <property name="text">
       <string>mute</string>
@@ -862,12 +871,13 @@
      <height>23</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuAaa">
+   <widget class="QMenu" name="menuProperts">
     <property name="title">
-     <string>aaa</string>
+     <string>Properts</string>
     </property>
+    <addaction name="actionProperts"/>
    </widget>
-   <addaction name="menuAaa"/>
+   <addaction name="menuProperts"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -878,6 +888,14 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionProperts">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Properts</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
