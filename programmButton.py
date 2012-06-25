@@ -24,7 +24,6 @@ class QProgrammButton(QtGui.QPushButton):
         self.drawWidget(qp)
         qp.end()
 
-        
     def drawWidget(self, qp):
         size = self.size()
         w = size.width()
