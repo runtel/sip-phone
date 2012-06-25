@@ -28,7 +28,6 @@ def installEventFilter(widget):
         	if event.type() == QtCore.QEvent.Enter:
 		    self.mouseenter.emit(widget.numberButton)
         	    return True
-
 	    return False
 	    
     enentfilter = statusCmdEventFilter(widget)

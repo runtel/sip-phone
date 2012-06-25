@@ -432,7 +432,7 @@
    <widget class="QGroupBox" name="groupBoxProgrammButton">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>450</x>
       <y>0</y>
       <width>161</width>
       <height>281</height>
@@ -868,7 +868,7 @@
      <x>0</x>
      <y>0</y>
      <width>708</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuProperts">
