@@ -14,8 +14,13 @@ class QStatusCmdButton(QtGui.QPushButton):
 
     def __init__(self, parent = None):
         super(QStatusCmdButton, self).__init__(parent)
-        self.status = False
+        self.status = True
+        self.trueIcon = ""
+        self.falseIcon = ""
         
+#	self.resetTrueIcon()
+#	self.resetFalseIcon();
+#	self.resetStatus()
            
     def paintEvent(self, e):
         QtGui.QPushButton.paintEvent(self, e)
@@ -26,21 +31,22 @@ class QStatusCmdButton(QtGui.QPushButton):
 
         
     def drawWidget(self, qp):
-        size = self.size()
-        w = size.width()
-        h = size.height()
+	pass
+#        size = self.size()
+#        w = size.width()
+#        h = size.height()
        
-        if self.status:
-            pen = QtGui.QPen(QtGui.QColor(20, 20, 20), w/5, 
-                QtCore.Qt.SolidLine)
-        else:
-            pen = QtGui.QPen(QtGui.QColor(0, 255, 0), w/5, 
-                QtCore.Qt.SolidLine)
-            
-        qp.setPen(pen)
-        qp.setBrush(QtCore.Qt.NoBrush)
+#        if self.status:
+#            pen = QtGui.QPen(QtGui.QColor(20, 20, 20), w/5, 
+#                QtCore.Qt.SolidLine)
+#        else:
+#            pen = QtGui.QPen(QtGui.QColor(0, 255, 0), w/5, 
+#                QtCore.Qt.SolidLine)
+#            
+#        qp.setPen(pen)
+#        qp.setBrush(QtCore.Qt.NoBrush)
 #        qp.drawPoint(w - w/10, 40)
-	qp.drawLine(w - w/5, 0, w, 0)
+#	qp.drawLine(w - w/5, 0, w, 0)
 
 
     def getStatus(self):
@@ -48,18 +54,50 @@ class QStatusCmdButton(QtGui.QPushButton):
 
     @QtCore.pyqtSlot(bool)
     def setStatus(self, value):
-        if self.status != value:
+#        if self.status != value:
             self.status = value
+            if self.status:
+    		self.setIcon(QtGui.QIcon(self.trueIcon))
+    	    else:
+		self.setIcon(QtGui.QIcon(self.falseIcon))
+
             self.emit(QtCore.SIGNAL("statusChanged(bool)"), value)
+
             self.update()
 
     def resetStatus(self):
-        if self.status:
-            self.status = False
-            self.emit(QtCore.SIGNAL("statusChanged(bool)"), value)
-            self.update()
+       self.setStatus(False)
 
     statusLed = QtCore.pyqtProperty (bool, getStatus, setStatus, resetStatus)
+
+
+    def getTrueIcon(self):
+        return self.trueIcon
+
+    def setTrueIcon(self, value):
+	self.trueIcon = value
+	self.setStatus(self.status)
+
+    def resetTrueIcon(self):
+	self.trueIcon = ""
+	self.setStatus(self.status)
+
+    trueIconProp = QtCore.pyqtProperty ("QString", getTrueIcon, setTrueIcon, resetTrueIcon)
+
+    def getFalseIcon(self):
+        return self.falseIcon
+
+    def setFalseIcon(self, value):
+	self.falseIcon = value
+	self.setStatus(self.status)
+	
+
+    def resetFalseIcon(self):
+	self.falseIcon = ""
+	self.setStatus(self.status)
+
+    falseIconProp = QtCore.pyqtProperty ("QString", getFalseIcon, setFalseIcon, resetFalseIcon)
+
 
 if __name__ == "__main__":
 
