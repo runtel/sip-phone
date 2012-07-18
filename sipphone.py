@@ -101,9 +101,9 @@ class SIPPhone(QtGui.QMainWindow):
 
         for i in xrange(0, len(self.programmButtonsLabel)):
             if self.programmButtonsLabel[i].numberButton >= 0:
-        	callName = self.getCallNameProgrammButton(self.programmButtonsLabel[i].numberButton);
-        	if callName:
-            	    self.programmButtonsLabel[i].setText(callName)
+                callName = self.getCallNameProgrammButton(self.programmButtonsLabel[i].numberButton);
+                if callName:
+                   self.programmButtonsLabel[i].setText(callName)
 
         QtCore.QObject.connect(self.sip, QtCore.SIGNAL("callout"), self.onCallOutChanged)
         QtCore.QObject.connect(self.sip, QtCore.SIGNAL("callin"), self.onCallInChanged)
