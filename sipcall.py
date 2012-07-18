@@ -6,6 +6,7 @@ Class обертка над pjsip
 """
 import sys
 import pjsua as pj
+from PyQt4 import QtCore
 import threading
 
 
@@ -20,6 +21,7 @@ class callCallback(pj.CallCallback):
         self.call = call
         self.sipaccount = sipaccount
         self.is_play_file = False
+
     def start_play_file(self, file_name, slot):
         """
         начинает воспроизведение файла
@@ -70,30 +72,33 @@ class callCallbackIn(callCallback):
         """
         уведомление об изменении состояния вызова
         """
-#        print "Call with", self.call.info().remote_uri,
-#        print "is", self.call.info().state_text,
-#        print "last code =", self.call.info().last_code,
-#        print "(" + self.call.info().last_reason + ")"
+        #print "Call with", self.call.info().remote_uri,
+        #print "is", self.call.info().state_text,
+        #print "last code =", self.call.info().last_code,
+        #print "(" + self.call.info().last_reason + ")"
 
         # в предответном проключаем одну мелодию
-        if self.call.info().state == pj.CallState.EARLY:
-            call_slot = self.call.info().conf_slot
-            self.start_play_file('/ATS/SOUND/music0.wav', call_slot)
+#        if self.call.info().state == pj.CallState.EARLY:
+#            call_slot = self.call.info().conf_slot
+#            self.start_play_file('/ATS/SOUND/music0.wav', call_slot)
 
-        # в разговорном подаем другую
-        if self.call.info().state == pj.CallState.CONFIRMED:
-            call_slot = self.call.info().conf_slot
-            self.stop_play_file(call_slot)
+#        # в разговорном подаем другую
+#        if self.call.info().state == pj.CallState.CONFIRMED:
+#            call_slot = self.call.info().conf_slot
+#            self.stop_play_file(call_slot)
 
-            # проключаем разговор
-            pj.Lib.instance().conf_connect(0, call_slot)
-            pj.Lib.instance().conf_connect(call_slot, 0)
+#            # проключаем разговор
+#            pj.Lib.instance().conf_connect(0, call_slot)
+#            pj.Lib.instance().conf_connect(call_slot, 0)
 
         if self.call.info().state == pj.CallState.DISCONNECTED:
             call_slot = self.call.info().conf_slot
             self.stop_play_file(call_slot)
             # удалем вызов
-            self.sipaccount.calls.remove(self.incall)
+#            self.sipaccount.calls.remove(self.incall)
+
+        self.sipaccount.sip.emit(QtCore.SIGNAL("callin"), self, self.call.info().state)
+
 
 # Сообщение от исходящего вызова
 class callCallbackOut(callCallback):
@@ -101,32 +106,29 @@ class callCallbackOut(callCallback):
     def __init__(self,  sipaccount = None, call = None):
         callCallback.__init__(self, sipaccount, call)
 
-
     # уведомление об изменении состояния
     def on_state(self):
-#        print "Call with", self.call.info().remote_uri,
-#        print "is", self.call.info().state_text,
-#        print "last code =", self.call.info().last_code,
-#        print "(" + self.call.info().last_reason + ")"
-
         # проключаем разговры
-        if self.call.info().state == pj.CallState.CONFIRMED:
-            self.stop_play_file(0)
 
-            call_slot = self.call.info().conf_slot
-            pj.Lib.instance().conf_connect(0, call_slot)
-            pj.Lib.instance().conf_connect(call_slot, 0)
+#        if self.call.info().state == pj.CallState.CONFIRMED:
+#            self.stop_play_file(0)
 
-        # в подаем КПВ в сторону пользователя
-        if self.call.info().state == pj.CallState.EARLY:
-            self.start_play_file('/ATS/SOUND/music1.wav', 0)
+#            call_slot = self.call.info().conf_slot
+#            pj.Lib.instance().conf_connect(0, call_slot)
+#            pj.Lib.instance().conf_connect(call_slot, 0)
 
-        if self.call.info().state == pj.CallState.DISCONNECTED:
-            self.stop_play_file(0)
+#        # в подаем КПВ в сторону пользователя
+#        if self.call.info().state == pj.CallState.EARLY:
+#            self.start_play_file('/ATS/SOUND/music1.wav', 0)
 
-            # удалем вызов
-            self.sipaccount.calls.remove(self.outcall)
+#        if self.call.info().state == pj.CallState.DISCONNECTED:
+#            self.stop_play_file(0)
+#            # удалем вызов
+#            self.sipaccount.calls.remove(self.outcall)
 
+        #self.sipaccount.sip.callBack.onCallChanged(self)
+        
+        self.sipaccount.sip.emit(QtCore.SIGNAL("callout"), self, self.call.info().state)
             
 
 class SIPAccountCallback(pj.AccountCallback):
@@ -134,9 +136,10 @@ class SIPAccountCallback(pj.AccountCallback):
     Callback для получения сообщений от sip account
     """
 
-    def __init__(self, account = None):
+    def __init__(self, sip, account = None):
         pj.AccountCallback.__init__(self, account)
         self.calls = []
+        self.sip = sip
 
 
     def on_incoming_call(self, call):
@@ -150,10 +153,14 @@ class SIPAccountCallback(pj.AccountCallback):
         # отвечаем ringing
 #        call.answer(180)
         # отвечаем call progressом
-        call.answer(183)
+#        call.answer(183)
 
         # запомнили вызов
         self.calls.append(call)
+
+        print call.info().state
+        self.sip.emit(QtCore.SIGNAL("callin"), call_cb, call.info().state)
+
 
 
     def waiter(self):
@@ -178,7 +185,7 @@ class SIPAccountCallback(pj.AccountCallback):
         """
         возвращает статус регистрации
         """
-        if self.account.info().reg_status >= 200:
+        if self.account.info().reg_status == 200:
             return True
         else:
             return False
@@ -194,20 +201,40 @@ class SIPAccountCallback(pj.AccountCallback):
 
 
 
-class SIP:
+class SIP(QtCore.QObject):
 
-    def __init__(self, cfg):
+    # два сигнала от регистрации и от состояния вызова
+#    reg_state = QtCore.pyqtSignal(int)
+    def __init__(self, callBack):
         """
         конструктор sip системы
         """
+        QtCore.QObject.__init__(self)
+
+        # объект которму все будет передаваться
+        self.callBack = callBack
+
+        my_media_cfg = pj.MediaConfig()
+        my_media_cfg.clock_rate = 8000
+#    my_media_cfg.jb_min = 40
+#    my_media_cfg.jb_max = 80
+        my_media_cfg.snd_clock_rate = 44100
+        my_media_cfg.no_vad = True
+        my_media_cfg.quality = 10
+#    my_media_cfg.audio_frame_ptime = 80
+#    my_media_cfg.audio_frame_ptime = 10
+        my_media_cfg.ptime = 0
+        my_media_cfg.max_media_ports = 4
+
         self.lib = pj.Lib()
         
         # sip account, можно будет сделать в принципе несколько
         self.account = None
+        self.account_callback = None
 
         try:
             # инициализируем саму библиотеку
-            self.lib.init(log_cfg = pj.LogConfig(level = LOG_LEVEL, callback = self.log_cb))
+            self.lib.init(log_cfg = pj.LogConfig(level = LOG_LEVEL, callback = self.log_cb), media_cfg = my_media_cfg)
             # создаем транспортный уровень
             self.transport = self.lib.create_transport(pj.TransportType.UDP, pj.TransportConfig(5060))
 
@@ -221,20 +248,29 @@ class SIP:
         """
         создает новый аккаунт
         """
-        self.account = self.lib.create_account(pj.AccountConfig("192.168.5.49", "417", "417"))
-        self.account_callback = SIPAccountCallback(self.account)
+        self.account = self.lib.create_account(pj.AccountConfig(
+                account_info["registrator"].encode('ascii','ignore'),
+                account_info["username"].encode('ascii','ignore'),
+                account_info["password"].encode('ascii','ignore')))
+                
+        self.account_callback = SIPAccountCallback(self, self.account)
         self.account.set_callback(self.account_callback)
+        # ждем окончания регистрации
         self.account_callback.wait()
         if self.account_callback.reg_status():
             return self.account
+        self.delete_account()
         return None
 
+    def delete_account(self):
+        if self.account:
+            self.account.delete()
+        self.account = None
 
-    def make_new_call(self, number):
+    def make_new_call(self, uri):
         try:
-            uri = "sip:" + number + "@192.168.5.49"
             callback = callCallbackOut(self.account_callback)
-            call = self.account.make_call(uri, callback)
+            call = self.account.make_call(uri.encode('ascii','ignore'), callback)
             #call.set_callback(callback)
             callback.outcall = call
             self.account_callback.calls.append(call)
@@ -242,6 +278,11 @@ class SIP:
         except pj.Error, e:
             print "Exception: " + str(e)
             return None
+
+    def hangup_calls(self):
+        if self.account_callback:
+            for call in self.account_callback.calls:
+            	call.hangup()
 
     def log_cb(self, level, str, len):
         """
@@ -257,8 +298,10 @@ class SIP:
         print "Destructor"
 
     def clean(self):
+        self.hangup_calls()
         self.transport = None
-        self.account.delete()
+        if self.account:
+            self.account.delete()
         self.account = None
         self.lib.destroy()
         self.lib = None
