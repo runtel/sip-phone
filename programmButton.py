@@ -25,20 +25,21 @@ class QProgrammButton(QtGui.QPushButton):
         qp.end()
 
     def drawWidget(self, qp):
-        size = self.size()
-        w = size.width()
-        h = size.height()
+	pass
+#        size = self.size()
+#        w = size.width()
+#        h = size.height()
        
-        if self.green:
-            pen = QtGui.QPen(QtGui.QColor(20, 20, 20), 10, 
-                QtCore.Qt.SolidLine)
-        else:
-            pen = QtGui.QPen(QtGui.QColor(0, 255, 0), 10, 
-                QtCore.Qt.SolidLine)
+#        if self.green:
+#            pen = QtGui.QPen(QtGui.QColor(20, 20, 20), 10, 
+#                QtCore.Qt.SolidLine)
+#        else:
+#            pen = QtGui.QPen(QtGui.QColor(0, 255, 0), 10, 
+#                QtCore.Qt.SolidLine)
             
-        qp.setPen(pen)
-        qp.setBrush(QtCore.Qt.NoBrush)
-        qp.drawRect(0, 0, w-1, h-1)
+#        qp.setPen(pen)
+#        qp.setBrush(QtCore.Qt.NoBrush)
+#        qp.drawRect(0, 0, w-1, h-1)
 
 
     def getGreen(self):
