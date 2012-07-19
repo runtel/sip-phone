@@ -121,15 +121,15 @@ class SIPPhone(QtGui.QMainWindow):
             with open('cfg.pick', 'rb') as f:
                 self.cfg = pickle.load(f)
         except:
-            self.cfg["buttons"] = {}
-            self.cfg["name"] = {}
-            self.cfg["username"] = ""
-            self.cfg["registrator"] = ""
+            self.cfg["buttons"] = {}      # номера на кнопках
+            self.cfg["name"] = {}         # имена на кнопках
+            self.cfg["username"] = ""     # имя пользователя
+            self.cfg["registrator"] = ""  # где регистрируемся
 
 
     def init(self):
 
-        self.setWindowTitle("uri: sip:" + self.cfg["username"] + "@" + self.cfg["registrator"])
+        self.setWindowTitle("uri: sip:" + self.getCfgPropertyStr("username") + "@" + self.getCfgPropertyStr("registrator"))
         self.register(False)
 
         self.currentCall = None
@@ -142,6 +142,7 @@ class SIPPhone(QtGui.QMainWindow):
 
         with open('cfg.pick', 'wb') as f:
             pickle.dump(self.cfg, f)
+            
 
     def programmButtonsLabelContextMenu(self, position):
         """
@@ -229,28 +230,43 @@ class SIPPhone(QtGui.QMainWindow):
         menu.exec_(programmButton.mapToGlobal(position))
 
 
+    def getCfgPropertyStr(self, propertyName):
+        """
+        метод возвращает значение св-ва из конфигурации
+        пустую строку если на кнопке ни чего не прописано
+        """
+        if self.cfg.has_key(propertyName):
+            return self.cfg[propertyName];
+        return ""
+
+
     def getCallNameProgrammButton(self, numberButton):
         """
         метод возвращает имя связаное с кнопкой
         None если на кнопке ни чего не прописано
         """
-        # в словаре есть ключ "buttons"
-        if self.cfg.has_key("name"):
-            # есть ключ по номеру кнопки
-            if self.cfg["name"].has_key(numberButton):
-                return self.cfg["name"][numberButton]
-        return None
-    
+        return self.getProgrammButtonValue(numberButton, "name")
+
+
     def getCallNumberProgrammButton(self, numberButton):
         """
         метод возвращает значение кнопки
         None если на кнопке ни чего не прописано
         """
-        # в словаре есть ключ "buttons"
-        if self.cfg.has_key("buttons"):
+        return self.getProgrammButtonValue(numberButton, "buttons")
+
+
+    def getProgrammButtonValue(self, numberButton, keyName):
+        """
+        метод возвращает значение связаное с ключем keyName
+        None если на кнопке ни чего не прописано
+        """
+
+        # в словаре есть ключ "name"
+        if self.cfg.has_key(keyName):
             # есть ключ по номеру кнопки
-            if self.cfg["buttons"].has_key(numberButton):
-                return self.cfg["buttons"][numberButton]
+            if self.cfg[keyName].has_key(numberButton):
+                return self.cfg[keyName][numberButton]
         return None
 
 
@@ -335,9 +351,12 @@ class SIPPhone(QtGui.QMainWindow):
         if len(self.number):
             self.plainTextEditDisplay.setPlainText("Dial to :" + self.number)
             if self.sip.account is None:
-                self.plainTextEditDisplay.setPlainText("Registartion")
+                self.plainTextEditDisplay.setPlainText("Registration")
             else:
-                self.currentCall = self.sip.make_new_call("sip:" + self.number + "@" + self.cfg["registrator"])
+                if len(self.cfg["registrator"]):
+                    self.currentCall = self.sip.make_new_call("sip:" + self.number + "@" + self.cfg["registrator"])
+                else:
+                    self.plainTextEditDisplay.setPlainText("Need registrator")
         else:
             self.plainTextEditDisplay.setPlainText("Need number")
 
@@ -502,6 +521,9 @@ class SIPPhone(QtGui.QMainWindow):
 
         if state == pj.CallState.INCOMING:
             self.currentCall = callBack.call
+            if self.pushButton_CmdDND.statusLed:
+                self.currentCall.answer(486)
+                return
             # отвечаем ringing
             self.currentCall.answer(180)
             # отвечаем call progressом
@@ -544,6 +566,7 @@ class SIPPhone(QtGui.QMainWindow):
 
 
 if __name__ == "__main__":
+#    QtGui.QApplication.setStyle(QtGui.QWindowsVistaStyle())
     app = QtGui.QApplication(sys.argv)
     myapp = SIPPhone()
     myapp.show()
