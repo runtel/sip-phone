@@ -55,6 +55,14 @@ class callCallback(pj.CallCallback):
         else:
             print "Media is inactive"
 
+    def on_transfer_status(self, code, reason, final, cont):
+        """
+        уведомление об изменении состояния вызова
+        """
+
+#        print code, reason, final, cont
+        self.sipaccount.sip.emit(QtCore.SIGNAL("transfer_status"), self, code, reason)
+
 class callCallbackIn(callCallback):
     """
     callback входящего вызова
@@ -129,6 +137,8 @@ class callCallbackOut(callCallback):
         #self.sipaccount.sip.callBack.onCallChanged(self)
         
         self.sipaccount.sip.emit(QtCore.SIGNAL("callout"), self, self.call.info().state)
+ 
+
             
 
 class SIPAccountCallback(pj.AccountCallback):
