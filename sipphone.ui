@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>729</width>
-    <height>415</height>
+    <width>707</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -41,44 +41,11 @@
    </size>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPlainTextEdit" name="plainTextEditDisplay">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>421</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="inputMethodHints">
-     <set>Qt::ImhDigitsOnly</set>
-    </property>
-    <property name="lineWidth">
-     <number>2</number>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOff</enum>
-    </property>
-    <property name="lineWrapMode">
-     <enum>QPlainTextEdit::NoWrap</enum>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBoxDigit">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>190</y>
+      <y>220</y>
       <width>131</width>
       <height>171</height>
      </rect>
@@ -86,204 +53,144 @@
     <property name="title">
      <string/>
     </property>
-    <widget class="QPushButton" name="pushButtonDigit7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>7</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit8">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>90</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>8</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit2">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>10</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>2</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>4</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit1">
+    <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>31</width>
-       <height>32</height>
+       <width>114</width>
+       <height>151</height>
       </rect>
      </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>1</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit6">
-     <property name="geometry">
-      <rect>
-       <x>90</x>
-       <y>50</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>6</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit5">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>50</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>5</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit9">
-     <property name="geometry">
-      <rect>
-       <x>90</x>
-       <y>90</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>9</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit3">
-     <property name="geometry">
-      <rect>
-       <x>90</x>
-       <y>10</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>3</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigitStar">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>130</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>*</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigit0">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>130</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>0</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButtonDigitGrid">
-     <property name="geometry">
-      <rect>
-       <x>90</x>
-       <y>130</y>
-       <width>31</width>
-       <height>32</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string>#</string>
-     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="1">
+       <widget class="QPushButton" name="pushButtonDigit8">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>8</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="pushButtonDigit9">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>9</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pushButtonDigit4">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="pushButtonDigit7">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>7</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="pushButtonDigit5">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>5</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pushButtonDigit6">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>6</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="pushButtonDigitStar">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>*</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="pushButtonDigit0">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="pushButtonDigitGrid">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>#</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pushButtonDigit3">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="pushButtonDigit2">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="pushButtonDigit1">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxSystem">
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>190</y>
+      <y>220</y>
       <width>281</width>
       <height>171</height>
      </rect>
@@ -572,14 +479,30 @@
       <string>./ico/1341998331_microphone.png</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_CmdTransfer">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>130</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="text">
+      <string>trans</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxProgrammButton">
     <property name="geometry">
      <rect>
-      <x>433</x>
+      <x>440</x>
       <y>0</y>
-      <width>271</width>
-      <height>361</height>
+      <width>261</width>
+      <height>391</height>
      </rect>
     </property>
     <property name="focusPolicy">
@@ -1371,113 +1294,86 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>60</y>
+      <y>70</y>
       <width>421</width>
-      <height>121</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="title">
      <string/>
     </property>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>31</width>
-       <height>16</height>
-      </rect>
+    <widget class="QListView" name="listCall">
+     <property name="enabled">
+      <bool>true</bool>
      </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
-       <width>31</width>
-       <height>16</height>
+       <y>10</y>
+       <width>401</width>
+       <height>121</height>
       </rect>
      </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
+     <property name="editTriggers">
+      <set>QAbstractItemView::CurrentChanged|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed|QAbstractItemView::SelectedClicked</set>
      </property>
-     <property name="text">
-      <string/>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>60</y>
-       <width>31</width>
-       <height>16</height>
-      </rect>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectItems</enum>
      </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
+     <property name="layoutMode">
+      <enum>QListView::SinglePass</enum>
      </property>
-     <property name="text">
-      <string/>
+     <property name="selectionRectVisible">
+      <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>31</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_5">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>100</y>
-       <width>31</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QTextEdit" name="textEdit">
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>421</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QPlainTextEdit" name="plainTextEditDisplay">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>10</x>
        <y>10</y>
-       <width>331</width>
-       <height>111</height>
+       <width>401</width>
+       <height>41</height>
       </rect>
      </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;skjskjskjskksjskjs&lt;br /&gt;kjkjkjkjkjjk&lt;br /&gt;kjkjkjkjjk&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <property name="font">
+      <font>
+       <pointsize>18</pointsize>
+      </font>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhDigitsOnly</set>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
      </property>
     </widget>
    </widget>
@@ -1487,7 +1383,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>729</width>
+     <width>707</width>
      <height>21</height>
     </rect>
    </property>
@@ -1520,14 +1416,14 @@ p, li { white-space: pre-wrap; }
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QProgrammButtonLabel</class>
-   <extends>QLabel</extends>
-   <header>programmButtonLabel</header>
-  </customwidget>
-  <customwidget>
    <class>QProgrammButton</class>
    <extends>QPushButton</extends>
    <header>programmButton</header>
+  </customwidget>
+  <customwidget>
+   <class>QProgrammButtonLabel</class>
+   <extends>QLabel</extends>
+   <header>programmButtonLabel</header>
   </customwidget>
   <customwidget>
    <class>QStatusCmdButton</class>
