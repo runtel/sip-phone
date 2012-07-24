@@ -15,7 +15,7 @@ from property import propertyWindow
 from statusCmdEventFilter import installEventFilter
 from sipcall import SIP
 import pjsua as pj
-#from sipphone_ui import  Ui_sipPhoneWindow
+from callList import callListModel, callDelegate
 
 def module_path():
     if hasattr(sys, "frozen"):
@@ -60,6 +60,7 @@ class SIPPhone(QtGui.QMainWindow):
         QtCore.QObject.connect(self.pushButton_CmdDial, QtCore.SIGNAL("clicked()"), lambda:self.dial())
         QtCore.QObject.connect(self.pushButton_CmdRegister, QtCore.SIGNAL("clicked()"), lambda:self.register())
         QtCore.QObject.connect(self.pushButton_CmdAnswer, QtCore.SIGNAL("clicked()"), lambda:self.answer())
+        QtCore.QObject.connect(self.pushButton_CmdTransfer, QtCore.SIGNAL("clicked()"), lambda:self.transfer())
 
         # программируемые кнопки
         # создаем список наших кнопок
@@ -107,7 +108,21 @@ class SIPPhone(QtGui.QMainWindow):
 
         QtCore.QObject.connect(self.sip, QtCore.SIGNAL("callout"), self.onCallOutChanged)
         QtCore.QObject.connect(self.sip, QtCore.SIGNAL("callin"), self.onCallInChanged)
+        QtCore.QObject.connect(self.sip, QtCore.SIGNAL("transfer_status"), self.onCallTransfer)
+        
+        # create objects
+        self.list_data = [None, None, None, None, None]
+        self.lm = callListModel(self.list_data, self)
+        #lv = QtGui.QListView()
+        de = callDelegate(self.listCall)
 
+        self.listCall.setModel(self.lm)
+        self.listCall.setItemDelegate(de)
+        
+        # обработчик сообщения о выборке объекта из списка
+        self.listCall.clicked.connect(self.onListCallClicked)
+        self.listCall.doubleClicked.connect(self.onListCallDblClicked)
+    
 
     def cfgInit(self):
         """
@@ -270,7 +285,7 @@ class SIPPhone(QtGui.QMainWindow):
         return None
 
 
-    def event(self,e):
+    def event(self, e):
         """
         обработчик сообщений от клавиатуры
         """
@@ -342,6 +357,65 @@ class SIPPhone(QtGui.QMainWindow):
             self.statusBar.showMessage(self.currentCall.info().state_text)
 
 
+    def onListCallClicked(self, index):
+        """
+        обработчик сообщения о выборке из списка вызов
+        """
+        #for i in self.listCall.selectedIndexes():
+        #    print i.row()
+        pass
+
+    def onListCallDblClicked(self, index):
+        """
+        обработчик сообщения о двойном нажатии клавиши
+        """        
+        for i in self.listCall.selectedIndexes():
+            call = self.lm.data(i,  QtCore.Qt.DisplayRole).toPyObject()
+            if call is None:
+                continue
+                
+            if call == self.currentCall:
+                continue
+
+            # текущий вызов должен быть в разговорном
+            if not self.currentCall is None:
+                if self.currentCall.info().state == pj.CallState.CONFIRMED:
+                    self.currentCall.hold()
+
+            if call.info().state == pj.CallState.CONFIRMED:
+                call.unhold()
+                self.currentCall = call
+                return
+
+
+
+
+    def getFreeCallID(self):
+        """
+        выдает свободный call индекс
+        """
+        for i, item in enumerate(self.list_data):
+            if item is None:
+                return i
+        return None
+
+    def connectCall(self, callid, call):
+        """
+        проверочка не помешает
+        """
+        
+#        self.list_data[callid] = call
+        index = self.lm.index(callid)
+        self.lm.setData(index, call, QtCore.Qt.EditRole)
+        
+#        self.listCall.repaint()
+
+    def freeCall(self, call):
+        for i, item in enumerate(self.list_data):
+            if call == item:
+                index = self.lm.index(i)
+                self.lm.setData(index, None, QtCore.Qt.EditRole)
+    
     def dial(self):
         """
         метод инициализируем вызов по SIP
@@ -354,7 +428,25 @@ class SIPPhone(QtGui.QMainWindow):
                 self.plainTextEditDisplay.setPlainText("Registration")
             else:
                 if len(self.cfg["registrator"]):
-                    self.currentCall = self.sip.make_new_call("sip:" + self.number + "@" + self.cfg["registrator"])
+                    callid = self.getFreeCallID()
+                    if not callid is None:
+                        # если есть текущий вызов ставим его на удержание
+                        if not self.currentCall is None:
+                            # если он не в разговорном то на hold ставить его нельзя
+                            if self.currentCall.info().state == pj.CallState.CONFIRMED:
+                                self.currentCall.hold()
+                            else: # поставим когда ответит
+                                pass
+                        call = self.sip.make_new_call("sip:" + self.number + "@" + self.cfg["registrator"])
+                        self.connectCall(callid, call)
+                        # нужно выделить currenCall в списке
+                        index = self.lm.index(callid)
+                        self.listCall.setCurrentIndex(index)
+
+                        self.currentCall = call
+
+                    else:
+                        self.plainTextEditDisplay.setPlainText("Free line is absent")
                 else:
                     self.plainTextEditDisplay.setPlainText("Need registrator")
         else:
@@ -417,11 +509,26 @@ class SIPPhone(QtGui.QMainWindow):
         метод обработчик нажатия на кнопку hangup
         конец соединения
         """
-        if not (self.currentCall is None):
-            self.sip.hangup_calls()
-            self.plainTextEditDisplay.setPlainText("Hangup")
-            self.number = ""
-        self.currentCall = None
+        #отбиваем выделеные вызовы
+
+        for i in self.listCall.selectedIndexes():
+            call = self.lm.data(i,  QtCore.Qt.DisplayRole).toPyObject()
+            if call == self.currentCall:
+                self.plainTextEditDisplay.setPlainText("Hangup")
+                self.number = ""
+
+            if not call is None:
+                call.hangup()
+
+
+#        if not self.currentCall is None:
+#            # отбиваем текущий вызов
+#            
+#
+#            self.currentCall.hangup()
+#            self.plainTextEditDisplay.setPlainText("Hangup")
+#            self.number = ""
+#            #self.currentCall = None
 
 
     def record(self):
@@ -462,10 +569,11 @@ class SIPPhone(QtGui.QMainWindow):
             self.sip.delete_account()
             self.pushButton_CmdRegister.statusLed = False
         else:
-            if self.sip.create_account(self.cfg):
-                self.pushButton_CmdRegister.statusLed = True
-            else:
-                self.pushButton_CmdRegister.statusLed = False
+            if len(self.cfg["registrator"]):
+                if self.sip.create_account(self.cfg):
+                    self.pushButton_CmdRegister.statusLed = True
+                else:
+                    self.pushButton_CmdRegister.statusLed = False
 
         if self.pushButton_CmdRegister.statusLed:
             self.pushButton_CmdRegister.setText("unregister")
@@ -478,10 +586,30 @@ class SIPPhone(QtGui.QMainWindow):
         обработчик кнопки ответ абонета
         """
         # проверяем на активность вызова
-        if not (self.currentCall is None):
+        if not self.currentCall is None:
             # проверяем нахождение в предответном
             if (self.currentCall.info().role == pj.CallRole.CALLEE) & (self.currentCall.info().state == pj.CallState.EARLY):
                 self.currentCall.answer()
+
+    def transfer(self):
+        """
+        обработчик кнопки перевод абонета
+        переводит текущий вызов на выбраный
+        """
+        # выделен должен быть только один вызов
+        sel_len =  len(self.listCall.selectedIndexes())
+        if sel_len != 1:
+            return
+
+        if self.currentCall is None:
+            return
+
+        indexes = self.listCall.selectedIndexes()
+        call = self.lm.data(indexes[0],  QtCore.Qt.DisplayRole).toPyObject()
+
+        self.currentCall.transfer_to_call(call)
+        #self.currentCall.hangup()
+
 
     def onCallInChanged(self, callBack, state):
         """
@@ -492,18 +620,19 @@ class SIPPhone(QtGui.QMainWindow):
         if state == pj.CallState.DISCONNECTED:
             # конец соединения
             callBack.sipaccount.calls.remove(callBack.incall)
+            self.freeCall(callBack.incall)
             callBack.incall = None
             self.statusBar.showMessage("Disconnected")
             self.currentCall = None
             return
 
 
-        print "Call with", callBack.call.info().remote_uri,
-        print "is", callBack.call.info().state_text,
-        print "last code =", callBack.call.info().last_code,
-        print "(" + callBack.call.info().last_reason + ")"
+#        print "Call with", callBack.call.info().remote_uri,
+#        print "is", callBack.call.info().state_text,
+#        print "last code =", callBack.call.info().last_code,
+#        print "(" + callBack.call.info().last_reason + ")"
 
-        # в пре
+        # в предответном играем музыку
         if state == pj.CallState.EARLY:
             if callBack.call.info().last_code == 183:
                 call_slot = callBack.call.info().conf_slot
@@ -520,6 +649,13 @@ class SIPPhone(QtGui.QMainWindow):
             pj.Lib.instance().conf_connect(call_slot, 0)
 
         if state == pj.CallState.INCOMING:
+            callid = self.getFreeCallID()
+            if not callid is None:
+                self.connectCall(callid, callBack.call)
+            else:
+                self.currentCall.answer(486)
+                return
+
             self.currentCall = callBack.call
             if self.pushButton_CmdDND.statusLed:
                 self.currentCall.answer(486)
@@ -531,6 +667,7 @@ class SIPPhone(QtGui.QMainWindow):
 
         self.statusBar.showMessage(callBack.call.info().state_text)
 
+
     def onCallOutChanged(self, callBack, state):
         """
         обработчик событий исходящего вызова
@@ -539,15 +676,18 @@ class SIPPhone(QtGui.QMainWindow):
         if state == pj.CallState.DISCONNECTED:
             callBack.stop_play_file(0)
             callBack.sipaccount.calls.remove(callBack.outcall)
+            self.freeCall(callBack.outcall)
+            if self.currentCall == callBack.outcall:
+                self.currentCall = None
             callBack.outcall = None
             self.statusBar.showMessage("Disconnected")
-            self.currentCall = None
+            
             return
 
-#        print "Call with", callBack.call.info().remote_uri,
-#        print "is", callBack.call.info().state_text,
-#        print "last code =", callBack.call.info().last_code,
-#        print "(" + callBack.call.info().last_reason + ")"
+        print "Call with", callBack.call.info().remote_uri,
+        print "is", callBack.call.info().state_text,
+        print "last code =", callBack.call.info().last_code,
+        print "(" + callBack.call.info().last_reason + ")"
 
         self.statusBar.showMessage(callBack.call.info().state_text)
 
@@ -560,13 +700,25 @@ class SIPPhone(QtGui.QMainWindow):
             pj.Lib.instance().conf_connect(0, call_slot)
             pj.Lib.instance().conf_connect(call_slot, 0)
 
+            # это вызов уже не активный сразу ставим его на удержание
+            if self.currentCall != callBack.outcall:
+                callBack.outcall.hold()
+
         # проключаем мызыку
         if state == pj.CallState.EARLY:
             callBack.start_play_file('sounds/dialtone.wav', 0)
 
 
+    def onCallTransfer(self, callBack, code, reason):
+        print "CallTransfer message", code, reason
+        # все хорошо перевелось вызов освобождаю
+        if (reason == "OK") & (code == 200):
+            callBack.call.hangup()
+
 if __name__ == "__main__":
-#    QtGui.QApplication.setStyle(QtGui.QWindowsVistaStyle())
+    # в среде win стандартные кнопки настолько плохо смотряться что будем использовать другую тему
+    if sys.platform == "win32":
+        QtGui.QApplication.setStyle(QtGui.QStyleFactory.create("Plastique"))
     app = QtGui.QApplication(sys.argv)
     myapp = SIPPhone()
     myapp.show()
