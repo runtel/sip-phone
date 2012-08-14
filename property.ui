@@ -98,70 +98,50 @@
     <string>Registrator:</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QComboBox" name="comboRecordDevices">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>100</y>
-     <width>31</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>ico/1341998331_microphone.png</normaloff>
-     <normalon>ico/1341998331_microphone_off.png</normalon>ico/1341998331_microphone.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>24</width>
+     <x>100</x>
+     <y>160</y>
+     <width>111</width>
      <height>24</height>
-    </size>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="autoRepeat">
-    <bool>false</bool>
-   </property>
-   <property name="autoExclusive">
-    <bool>true</bool>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
+    </rect>
    </property>
   </widget>
-  <widget class="QToolButton" name="toolButton">
+  <widget class="QComboBox" name="comboPlaybackDevices">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>170</y>
-     <width>27</width>
+     <x>100</x>
+     <y>130</y>
+     <width>111</width>
      <height>24</height>
     </rect>
    </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
+  </widget>
+  <widget class="QLabel" name="labelPlaybackDevice">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>56</width>
+     <height>15</height>
+    </rect>
    </property>
    <property name="text">
-    <string>...</string>
+    <string>Playback</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelRecordDevice">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>160</y>
+     <width>56</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Recording</string>
    </property>
   </widget>
  </widget>
