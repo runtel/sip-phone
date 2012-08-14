@@ -7,7 +7,6 @@
 import sys
 from PyQt4 import QtCore, QtGui, uic
 import sqlite3
-import pickle
 
 class recordbookWindow(QtGui.QDialog):
 
