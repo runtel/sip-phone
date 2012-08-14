@@ -60,8 +60,10 @@ class callCallback(pj.CallCallback):
         уведомление об изменении состояния вызова
         """
 
-#        print code, reason, final, cont
+        print code, reason, final, cont
         self.sipaccount.sip.emit(QtCore.SIGNAL("transfer_status"), self, code, reason)
+        return cont
+        
 
 class callCallbackIn(callCallback):
     """
@@ -168,7 +170,7 @@ class SIPAccountCallback(pj.AccountCallback):
         # запомнили вызов
         self.calls.append(call)
 
-        print call.info().state
+#        print call.info().state
         self.sip.emit(QtCore.SIGNAL("callin"), call_cb, call.info().state)
 
 
@@ -226,17 +228,27 @@ class SIP(QtCore.QObject):
 
         my_media_cfg = pj.MediaConfig()
         my_media_cfg.clock_rate = 8000
-#    my_media_cfg.jb_min = 40
-#    my_media_cfg.jb_max = 80
-        my_media_cfg.snd_clock_rate = 44100
+        #my_media_cfg.clock_rate = 48000
+
+        my_media_cfg.jb_min = 40
+        my_media_cfg.jb_max = 80
+
+        my_media_cfg.snd_clock_rate = 48000
+        #my_media_cfg.snd_clock_rate = 8000
         my_media_cfg.no_vad = True
         my_media_cfg.quality = 10
-#    my_media_cfg.audio_frame_ptime = 80
-#    my_media_cfg.audio_frame_ptime = 10
+
+        #my_media_cfg.audio_frame_ptime = 80
+        #my_media_cfg.audio_frame_ptime = 10
+
         my_media_cfg.ptime = 0
-        my_media_cfg.max_media_ports = 4
+        my_media_cfg.max_media_ports = 16
+        my_media_cfg.ec_tail_len = 0
+
 
         self.lib = pj.Lib()
+
+        
         
         # sip account, можно будет сделать в принципе несколько
         self.account = None
@@ -244,7 +256,20 @@ class SIP(QtCore.QObject):
 
         try:
             # инициализируем саму библиотеку
-            self.lib.init(log_cfg = pj.LogConfig(level = LOG_LEVEL, callback = self.log_cb), media_cfg = my_media_cfg)
+            #console_level = LOG_LEVEL,
+            
+            
+            self.lib.init(log_cfg = pj.LogConfig(level = LOG_LEVEL,  console_level = LOG_LEVEL, callback = self.log_cb), media_cfg = my_media_cfg)
+            #for dev in self.lib.enum_snd_dev():
+            #    print dev.name
+            #    print dev.input_channels
+            #    print dev.output_channels
+            #    print dev.default_clock_rate
+            #    print "======="
+
+            #self.lib.set_snd_dev(0, 0)
+            
+            self.lib.set_null_snd_dev()
             # создаем транспортный уровень
             self.transport = self.lib.create_transport(pj.TransportType.UDP, pj.TransportConfig(5060))
 
@@ -279,8 +304,10 @@ class SIP(QtCore.QObject):
 
     def make_new_call(self, uri):
         try:
+            lck = self.lib.auto_lock()
             callback = callCallbackOut(self.account_callback)
             call = self.account.make_call(uri.encode('ascii','ignore'), callback)
+            del lck
             #call.set_callback(callback)
             callback.outcall = call
             self.account_callback.calls.append(call)
@@ -290,9 +317,10 @@ class SIP(QtCore.QObject):
             return None
 
     def hangup_calls(self):
-        if self.account_callback:
-            for call in self.account_callback.calls:
-            	call.hangup()
+        self.lib.hangup_all()
+#        if self.account_callback:
+#            for call in self.account_callback.calls:
+#            	call.hangup()
 
     def log_cb(self, level, str, len):
         """
