@@ -494,6 +494,15 @@
      <property name="text">
       <string>trans</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBoxProgrammButton">
@@ -1392,6 +1401,7 @@
      <string>Properts</string>
     </property>
     <addaction name="actionProperts"/>
+    <addaction name="actionRecordBook"/>
    </widget>
    <addaction name="menuProperts"/>
   </widget>
@@ -1410,6 +1420,11 @@
    </property>
    <property name="text">
     <string>Properts</string>
+   </property>
+  </action>
+  <action name="actionRecordBook">
+   <property name="text">
+    <string>RecordBook</string>
    </property>
   </action>
  </widget>
