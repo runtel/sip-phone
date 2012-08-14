@@ -10,7 +10,7 @@ from PyQt4 import QtCore, QtGui, uic
 
 class propertyWindow(QtGui.QDialog):
 
-    def __init__(self, cfg, parent = None):
+    def __init__(self, cfg, listSndDevices, parent = None):
         """
         на входе конфигурация в виде словаря со значениями
         """
@@ -29,6 +29,16 @@ class propertyWindow(QtGui.QDialog):
             self.lineEditPassword.setText(cfg["password"])
         if cfg.has_key("registrator"):
             self.lineEditRegistrator.setText(cfg["registrator"])
+
+        for dev in listSndDevices:
+            if dev.output_channels:
+                self.comboRecordDevices.addItem(dev.name)
+            if dev.input_channels:
+                self.comboPlaybackDevices.addItem(dev.name)
+
+#        if cfg.has_key("recording"):
+
+#        if cfg.has_key("playback"):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
