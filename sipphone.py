@@ -8,12 +8,14 @@
 import os, sys
 import time
 import pickle
+import re
 from PyQt4 import QtCore, QtGui, uic
 
 from programmButton import QProgrammButton
 from programmButtonLabel import QProgrammButtonLabel
 from property import propertyWindow
 from recordbook import recordbookWindow
+from infoDocWidget import infoDocWidgeta
 from statusCmdEventFilter import installEventFilter
 from sipcall import SIP
 import pjsua as pj
@@ -64,6 +66,8 @@ class SIPPhone(QtGui.QMainWindow):
         QtCore.QObject.connect(self.pushButton_CmdAnswer, QtCore.SIGNAL("clicked()"), lambda:self.answer())
         QtCore.QObject.connect(self.pushButton_CmdTransfer, QtCore.SIGNAL("clicked()"), lambda:self.transfer())
 
+        self.pushButtonTest.clicked.connect(self.clkTest)
+        
         # программируемые кнопки
         # создаем список наших кнопок
         self.programmButtons = self.groupBoxProgrammButton.findChildren(QProgrammButton)
@@ -97,6 +101,9 @@ class SIPPhone(QtGui.QMainWindow):
         # изменение состояния регистрации
 #        QtCore.QObject.connect(self.pushButton_CmdRegister, QtCore.SIGNAL("statusChanged(bool)"), self.registerStatusChanged)
 
+        # запомнили картинку по умолчантю
+        self.defPixmap = self.infoFoto.pixmap()
+
         # инициализаируем конфигурацию
         self.cfgInit()
         self.sip = SIP(self)
@@ -124,7 +131,25 @@ class SIPPhone(QtGui.QMainWindow):
         # обработчик сообщения о выборке объекта из списка
         self.listCall.clicked.connect(self.onListCallClicked)
         self.listCall.doubleClicked.connect(self.onListCallDblClicked)
+
+
+        #self.setCentralWidget(self.pushButton_CmdTransfer)
+
+        # сздаем doc window
+        #dock = QtGui.QDockWidget("Customers", self)
+        #uic.loadUi("infoshow.ui", dock)
+
+        #self.addDockWidget(QtCore.Qt.RightDockWidgetArea, dock)
+#        self.viewMenu.addAction(self.dockWidget_2.toggleViewAction())
+#        self.dockWidget_2.setLayout(self.verticalLayout)
+
     
+    def clkTest(self):
+        """
+        тестирование по дписки
+        """
+        if self.sip.account:
+            self.sip.add_buddy()
 
     def cfgInit(self):
         """
@@ -149,8 +174,20 @@ class SIPPhone(QtGui.QMainWindow):
         self.setWindowTitle("uri: sip:" + self.getCfgPropertyStr("username") + "@" + self.getCfgPropertyStr("registrator"))
         self.register(False)
 
-        self.currentCall = None
+        self.setCurrentCall(None)
         self.statusBar.showMessage("Disconnected")
+
+    def setCurrentCall(self, call):
+        self.currentCall = call
+        number = None
+        try:
+            if not call is None:
+                number = re.findall(':(.*?)@', call.info().remote_uri)[0]
+                self.getNumberInfo(number)
+        except LookupError:
+            pass
+        self.getNumberInfo(number)
+
 
     def saveCfg(self):
         """
@@ -295,7 +332,7 @@ class SIPPhone(QtGui.QMainWindow):
             # проверяем на нажатие 0-9, добавляем к нашей строке
             if e.key() in xrange(QtCore.Qt.Key_0, QtCore.Qt.Key_9):
                 self.number = self.number + '%c' % e.key()
-                self.plainTextEditDisplay.setPlainText(self.number)
+                self.lineEditDisplay.setText(self.number)
             elif e.key() == QtCore.Qt.Key_Backspace:    # забой
                 self.backspace()
             elif e.key() == QtCore.Qt.Key_Return:   # собственно позвонить
@@ -308,27 +345,36 @@ class SIPPhone(QtGui.QMainWindow):
         """
         обработчик сообщения от меню "menuProperts"
         """
-        if checked is None:
-            # тут создадим окошко с настройками
-            widget = propertyWindow(self.cfg, self.sip.lib.enum_snd_dev())
-            if widget.exec_():
-                self.cfg["username"] = widget.lineEditUserName.text().__str__()
-                self.cfg["password"] = widget.lineEditPassword.text().__str__()
-                self.cfg["registrator"] = widget.lineEditRegistrator.text().__str__()
-                self.cfg["record"] = widget.comboRecordDevices.currentText().__str__()
-                self.cfg["playback"] = widget.comboPlaybackDevices.currentText().__str__()
-                self.saveCfg()
-                self.init()
+        if checked is None: return
+
+        # тут создадим окошко с настройками
+        widget = propertyWindow(self.cfg, self.sip.lib.enum_snd_dev())
+        if widget.exec_():
+            self.cfg["username"] = widget.lineEditUserName.text().__str__()
+            self.cfg["password"] = widget.lineEditPassword.text().__str__()
+            self.cfg["registrator"] = widget.lineEditRegistrator.text().__str__()
+            self.cfg["record"] = widget.comboRecordDevices.currentText().__str__()
+            self.cfg["playback"] = widget.comboPlaybackDevices.currentText().__str__()
+            self.saveCfg()
+            self.init()
 
     def on_actionRecordBook_triggered(self, checked = None):
         """
         обработчик сообщения от меню "menuRecordBook"
         """
         # тут создадим окошко для работы с записнухой        
-        if checked is None:
-            widget = recordbookWindow(None)
-            widget.exec_()
+        if checked is None: return
 
+        widget = recordbookWindow(None)
+        widget.exec_()
+
+
+    def on_actionShow_Info_triggered(self, checked = None):
+        """
+        обработчик сообщения от меню "showInfo"
+        """
+        if checked is None: return
+        self.groupInfo.setVisible(checked)
 
 
     def digit_key_pressed(self, par1):
@@ -336,7 +382,7 @@ class SIPPhone(QtGui.QMainWindow):
         обработчик сообщений от цифровых кнопок
         """
         self.number = self.number + par1
-        self.plainTextEditDisplay.setPlainText(self.number)
+        self.lineEditDisplay.setText(self.number)
 
 
     def clickedProgrammButton(self):
@@ -405,7 +451,7 @@ class SIPPhone(QtGui.QMainWindow):
             if call.info().state == pj.CallState.CONFIRMED:
                 call.unhold()
 
-            self.currentCall = call
+            self.setCurrentCall(call)
             return
 
 
@@ -444,9 +490,9 @@ class SIPPhone(QtGui.QMainWindow):
         # тут вписываемся для звонка
 
         if len(self.number):
-            self.plainTextEditDisplay.setPlainText("Dial to :" + self.number)
+            self.lineEditDisplay.setText("Dial to :" + self.number)
             if self.sip.account is None:
-                self.plainTextEditDisplay.setPlainText("Registration")
+                self.lineEditDisplay.setText("Registration")
             else:
                 if len(self.cfg["registrator"]):
                     callid = self.getFreeCallID()
@@ -459,7 +505,7 @@ class SIPPhone(QtGui.QMainWindow):
                                 # включен режим перевода вызова
                                 if self.pushButton_CmdTransfer.isChecked():
                                     self.currentCall.transfer(str("sip:" + self.number + "@" + self.cfg["registrator"]))
-                                    self.currentCall = None
+                                    self.setCurrentCall(None)
                                     return
                             else: # поставим когда ответит
                                 pass
@@ -475,14 +521,15 @@ class SIPPhone(QtGui.QMainWindow):
                         index = self.lm.index(callid)
                         self.listCall.setCurrentIndex(index)
 
-                        self.currentCall = call
+                        self.setCurrentCall(call)
+#                        self.getNumberInfo(self.number)
 
                     else:
-                        self.plainTextEditDisplay.setPlainText("Free line is absent")
+                        self.lineEditDisplay.setText("Free line is absent")
                 else:
-                    self.plainTextEditDisplay.setPlainText("Need registrator")
+                    self.lineEditDisplay.setText("Need registrator")
         else:
-            self.plainTextEditDisplay.setPlainText("Need number")
+            self.lineEditDisplay.setText("Need number")
 
 
     def clear(self):
@@ -491,7 +538,7 @@ class SIPPhone(QtGui.QMainWindow):
         очищает набранный номер
         """
         self.number = ""
-        self.plainTextEditDisplay.setPlainText(self.number)
+        self.lineEditDisplay.setText(self.number)
 
 
     def redial(self):
@@ -500,7 +547,7 @@ class SIPPhone(QtGui.QMainWindow):
         перезванивает по последнему номеру
         """
         # тут вписываемся для перезвона
-        self.plainTextEditDisplay.setPlainText("Redial to :" + self.number)
+        self.lineEditDisplay.setText("Redial to :" + self.number)
 
 
     def mute(self):
@@ -582,7 +629,7 @@ class SIPPhone(QtGui.QMainWindow):
         for i in self.listCall.selectedIndexes():
             call = self.lm.data(i,  QtCore.Qt.DisplayRole).toPyObject()
             if call == self.currentCall:
-                self.plainTextEditDisplay.setPlainText("Hangup")
+                self.lineEditDisplay.setText("Hangup")
                 self.number = ""
 
             if not call is None:
@@ -594,7 +641,7 @@ class SIPPhone(QtGui.QMainWindow):
 #            
 #
 #            self.currentCall.hangup()
-#            self.plainTextEditDisplay.setPlainText("Hangup")
+#            self.lineEditDisplay.setText("Hangup")
 #            self.number = ""
 #            #self.currentCall = None
 
@@ -618,7 +665,7 @@ class SIPPhone(QtGui.QMainWindow):
         стирает последний набранный символ номера
         """
         self.number = self.number[:-1]
-        self.plainTextEditDisplay.setPlainText(self.number)
+        self.lineEditDisplay.setText(self.number)
 
 
     def register(self, value = None):
@@ -678,7 +725,7 @@ class SIPPhone(QtGui.QMainWindow):
             self.currentCall.hold()
 
         # переключаемся на текущий вызов
-        self.currentCall = call
+        self.setCurrentCall(call)
         # проверяем нахождение в предответном
         if (self.currentCall.info().role == pj.CallRole.CALLEE) & (self.currentCall.info().state == pj.CallState.EARLY):
             self.currentCall.answer()
@@ -723,7 +770,7 @@ class SIPPhone(QtGui.QMainWindow):
             # конец соединения
             self.freeCall(callBack.call)
             if self.currentCall == callBack.call:
-                self.currentCall = None
+                self.setCurrentCall(None)
                 self.pushButton_CmdTransfer.setChecked(False)
             callBack.sipaccount.calls.remove(callBack.incall)
             callBack.incall = None
@@ -786,7 +833,7 @@ class SIPPhone(QtGui.QMainWindow):
             callBack.sipaccount.calls.remove(callBack.outcall)
             self.freeCall(callBack.outcall)
             if self.currentCall == callBack.outcall:
-                self.currentCall = None
+                self.setCurrentCall(None)
                 self.pushButton_CmdTransfer.setChecked(False)
             callBack.outcall = None
             self.statusBar.showMessage("Disconnected")
@@ -828,11 +875,25 @@ class SIPPhone(QtGui.QMainWindow):
 
         if code == 486:
             self.pushButton_CmdTransfer.setChecked(False)
-            self.plainTextEditDisplay.setPlainText("Transfer user busy")
+            self.lineEditDisplay.setText("Transfer user busy")
             #callBack.call.hangup()
             callBack.call.unhold()
             return 
             # для возможности возврата назад с удержания
+
+
+    def getNumberInfo(self, number):
+        """
+        отображает информацию о звонящем абоненте
+        """       
+        info = recordbookWindow.getInfoByNumber(number)
+        if info is None:
+            self.infoFoto.setPixmap(QtGui.QPixmap("ico/1345104250_metacontact_offline.png"))
+            return
+
+        if not info["img"].isNull():
+            pixmap = info["img"].scaled(self.infoFoto.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+            self.infoFoto.setPixmap(pixmap)
 
 if __name__ == "__main__":
     # в среде win стандартные кнопки настолько плохо смотряться что будем использовать другую тему
