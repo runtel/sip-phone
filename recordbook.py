@@ -76,12 +76,12 @@ class recordbookWindow(QtGui.QDialog):
             return
 
         if var[0] < 0: # это только что созданый элемент
-            self.lineName.setText("")
-            self.lineFamily.setText("")
-            self.lineSurname.setText("")
-            self.linePhone.setText("")
-            pixmap = QtGui.QPixmap()
-            self.labelIMG.setPixmap(pixmap)
+            self.setValue({"name": "",
+                           "family": "",
+                           "surname": "",
+                           "homephone": "",
+                           "img": QtGui.QPixmap()
+                         })
             return;
 
         connection = sqlite3.connect('recordbook.db')
@@ -92,18 +92,19 @@ class recordbookWindow(QtGui.QDialog):
         current.execute("select * from records where id=:id", {"id": var[0]})
         record = current.fetchone()
 
-        self.lineName.setText(record["name"])
-        self.lineFamily.setText(record["family"])
-        self.lineSurname.setText(record["surname"])
-        self.linePhone.setText(record["homephone"])
-
         bytearr = QtCore.QByteArray.fromRawData(record["Data"])
         
         pixmap = QtGui.QPixmap()
         pixmap.loadFromData(bytearr)
         if not pixmap.isNull():
             pixmap = pixmap.scaled(self.labelIMG.size(), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        self.labelIMG.setPixmap(pixmap)
+
+        self.setValue({"name": record["name"],
+                       "family": record["family"],
+                       "surname": record["surname"],
+                       "homephone": record["homephone"],
+                       "img": pixmap
+                       })
 
         if connection:
     	    connection.close()
@@ -111,6 +112,16 @@ class recordbookWindow(QtGui.QDialog):
         # забываем открытый файл
         self.fileName = None
         
+    def setValue(self, setValue):
+        try:
+            self.lineName.setText(setValue["name"])
+            self.lineFamily.setText(setValue["family"])
+            self.lineSurname.setText(setValue["surname"])
+            self.linePhone.setText(setValue["homephone"])
+            self.labelIMG.setPixmap(setValue["img"])
+        except KeyError:
+            print "key error"
+
     def openFile(self):
         options = QtGui.QFileDialog.Options()
         fileName = QtGui.QFileDialog.getOpenFileName(self,
@@ -129,7 +140,6 @@ class recordbookWindow(QtGui.QDialog):
 
     
     def new(self):
-        # как new
         listItem = QtGui.QListWidgetItem("")
         listItem.setData(QtCore.Qt.UserRole, -1)
         self.listRecordBook.addItem(listItem)
@@ -239,6 +249,41 @@ class recordbookWindow(QtGui.QDialog):
         if connection:
             connection.close()
         self.listRecordBook.takeItem(self.listRecordBook.row(item))
+
+    @staticmethod
+    def getInfoByNumber(number):
+        """
+        по номеру возвращает структуру с данными о звонящем, если данных нет структура пустая
+        если абонентов с таким номером несколько, возвращается первая найденая
+        """
+        if number is None:
+            return None
+
+        connection = sqlite3.connect('recordbook.db')
+        connection.row_factory = sqlite3.Row
+        current = connection.cursor()
+        current.execute("select * from records where homephone=:number or workphone=:number or mobilephone=:number", {"number": number})
+        record = current.fetchone()
+
+        if record is None:
+            return None
+
+        bytearr = QtCore.QByteArray.fromRawData(record["Data"])
+
+        pixmap = QtGui.QPixmap()
+        pixmap.loadFromData(bytearr)
+
+        if connection:
+            connection.close()
+
+        return {"name": record["name"],
+                "family": record["family"],
+                "surname": record["surname"],
+                "homephone": record["homephone"],
+                "workphone": record["workphone"],
+                "mobilephone": record["mobilephone"],
+                "img": pixmap
+               }
 
     
 if __name__ == "__main__":
