@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>943</width>
-    <height>427</height>
+    <width>966</width>
+    <height>431</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -288,7 +288,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QProgrammButton" name="programmButton3">
+          <widget class="QProgrammButton" name="programmButton03">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -304,7 +304,7 @@
           </widget>
          </item>
          <item row="1" column="1" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel3">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel03">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -348,7 +348,7 @@
           </spacer>
          </item>
          <item row="0" column="1" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel1">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel01">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -461,7 +461,7 @@
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QProgrammButton" name="programmButton0">
+          <widget class="QProgrammButton" name="programmButton01">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -477,7 +477,7 @@
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QProgrammButton" name="programmButton9">
+          <widget class="QProgrammButton" name="programmButton09">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -493,7 +493,7 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QProgrammButton" name="programmButton7">
+          <widget class="QProgrammButton" name="programmButton07">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -509,7 +509,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QProgrammButton" name="programmButton5">
+          <widget class="QProgrammButton" name="programmButton05">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -525,7 +525,7 @@
           </widget>
          </item>
          <item row="3" column="1" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel7">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel07">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -553,7 +553,7 @@
           </widget>
          </item>
          <item row="0" column="3">
-          <widget class="QProgrammButton" name="programmButton1">
+          <widget class="QProgrammButton" name="programmButton02">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -569,7 +569,7 @@
           </widget>
          </item>
          <item row="1" column="3">
-          <widget class="QProgrammButton" name="programmButton4">
+          <widget class="QProgrammButton" name="programmButton04">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -617,7 +617,7 @@
           </widget>
          </item>
          <item row="2" column="3">
-          <widget class="QProgrammButton" name="programmButton6">
+          <widget class="QProgrammButton" name="programmButton06">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -633,7 +633,7 @@
           </widget>
          </item>
          <item row="2" column="1" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel5">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel05">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -699,7 +699,7 @@
           </widget>
          </item>
          <item row="2" column="4" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel6">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel06">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -931,7 +931,7 @@
           </widget>
          </item>
          <item row="3" column="3">
-          <widget class="QProgrammButton" name="programmButton8">
+          <widget class="QProgrammButton" name="programmButton08">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -947,7 +947,7 @@
           </widget>
          </item>
          <item row="4" column="1" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel9">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel09">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1118,7 +1118,7 @@
           </widget>
          </item>
          <item row="0" column="4" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel2">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel02">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1174,7 +1174,7 @@
           </widget>
          </item>
          <item row="3" column="4" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel8">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel08">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1252,7 +1252,7 @@
           </widget>
          </item>
          <item row="1" column="4" colspan="2">
-          <widget class="QProgrammButtonLabel" name="programmButtonLabel4">
+          <widget class="QProgrammButtonLabel" name="programmButtonLabel04">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1580,6 +1580,9 @@
          </item>
          <item row="4" column="1">
           <widget class="QStatusCmdButton" name="pushButton_CmdRecord">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
            </property>
@@ -1689,6 +1692,12 @@
     </item>
     <item row="0" column="1" colspan="2">
      <widget class="QGroupBox" name="groupBox_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="title">
        <string/>
       </property>
@@ -1802,13 +1811,6 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="pushButtonTest">
-         <property name="text">
-          <string>test</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -1819,7 +1821,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>943</width>
+     <width>966</width>
      <height>21</height>
     </rect>
    </property>
