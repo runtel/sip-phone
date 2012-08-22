@@ -174,6 +174,13 @@ class SIPAccountCallback(pj.AccountCallback):
         self.sip.emit(QtCore.SIGNAL("callin"), call_cb, call.info().state)
 
 
+    def on_incoming_subscribe(self, buddy, from_uri, contact_uri, pres_obj):
+        """
+        входящая подписка на этот account
+        """
+        print "incoming_subscribe"
+        return (200, None)
+
 
     def waiter(self):
         """
@@ -203,14 +210,15 @@ class SIPAccountCallback(pj.AccountCallback):
             return False
 
 
+
     def on_reg_state(self):
         """
         обработчик событий о регистрации
         """
+
         self.timeout.cancel()
         if self.sem:
             self.sem.release()
-
 
 
 class SIP(QtCore.QObject):
@@ -269,7 +277,7 @@ class SIP(QtCore.QObject):
 
             #self.lib.set_snd_dev(0, 0)
             
-            self.lib.set_null_snd_dev()
+#            self.lib.set_null_snd_dev()
             # создаем транспортный уровень
             self.transport = self.lib.create_transport(pj.TransportType.UDP, pj.TransportConfig(5060))
 
@@ -299,6 +307,8 @@ class SIP(QtCore.QObject):
 
     def delete_account(self):
         if self.account:
+    	    self.account.set_registration(False)
+            self.account_callback.wait()
             self.account.delete()
         self.account = None
 
@@ -338,11 +348,26 @@ class SIP(QtCore.QObject):
     def clean(self):
         self.hangup_calls()
         self.transport = None
-        if self.account:
-            self.account.delete()
-        self.account = None
+        self.delete_account()
         self.lib.destroy()
         self.lib = None
+
+    def add_buddy(self):
+        if self.account:
+            cb = SIPEventDialogCallBack(self)
+            eventdialog = self.account.add_event_dialog("sip:100@192.168.5.49", cb)
+            eventdialog.set_callback(cb)
+            eventdialog.subscribe()
+
+
+class SIPEventDialogCallBack(pj.EventDialogCallback):
+
+    def __init__(self,  eventdialog=None):
+        pj.EventDialogCallback.__init__(self, eventdialog)
+#        print "EventDialogCallback"
+
+    def on_state(self):
+        print self.eventdialog.info().contact, self.eventdialog.info().online_text
 
 if __name__ == "__main__":
     sip = SIP(None)
