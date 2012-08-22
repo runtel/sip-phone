@@ -15,7 +15,6 @@ from programmButton import QProgrammButton
 from programmButtonLabel import QProgrammButtonLabel
 from property import propertyWindow
 from recordbook import recordbookWindow
-from infoDocWidget import infoDocWidgeta
 from statusCmdEventFilter import installEventFilter
 from sipcall import SIP
 import pjsua as pj
@@ -27,6 +26,36 @@ def module_path():
             unicode(sys.executable, sys.getfilesystemencoding( ))
         )
     return os.path.dirname(unicode(__file__, sys.getfilesystemencoding( )))
+
+
+class SIPEventDialogCallBack(pj.EventDialogCallback):
+
+    def __init__(self, button, eventdialog=None):
+        pj.EventDialogCallback.__init__(self, eventdialog)
+        self.button = button
+
+    def on_state(self):
+        """ обработчик сообщений подписки о состоянии абонента
+        """
+        #print "On state", self.eventdialog.info().online_text
+        self.button.stopFlash()
+        if self.eventdialog.info().online_text == "terminated":
+            self.button.greenLed = True
+            
+        if self.eventdialog.info().online_text == "trying":
+            self.button.redLed = True
+
+        if self.eventdialog.info().online_text == "early":
+            self.button.startFlash()
+            self.button.redLed = True
+
+        if self.eventdialog.info().online_text == "confirmed":
+            self.button.redLed = True
+
+        if self.eventdialog.info().online_text == "unsuscribing":
+            self.button.redLed = False
+            self.button.greenLed = False
+            self.button.update()
 
 class SIPPhone(QtGui.QMainWindow):
 
@@ -66,12 +95,15 @@ class SIPPhone(QtGui.QMainWindow):
         QtCore.QObject.connect(self.pushButton_CmdAnswer, QtCore.SIGNAL("clicked()"), lambda:self.answer())
         QtCore.QObject.connect(self.pushButton_CmdTransfer, QtCore.SIGNAL("clicked()"), lambda:self.transfer())
 
-        self.pushButtonTest.clicked.connect(self.clkTest)
+#        self.pushButtonTest.clicked.connect(self.clkTest)
         
         # программируемые кнопки
         # создаем список наших кнопок
         self.programmButtons = self.groupBoxProgrammButton.findChildren(QProgrammButton)
+        self.programmButtons = sorted(self.programmButtons, key = lambda item:item.objectName())
+        
         self.programmButtonsLabel = self.groupBoxProgrammButton.findChildren(QProgrammButtonLabel)
+        self.programmButtonsLabel = sorted(self.programmButtonsLabel, key = lambda item:item.objectName())
 
 #       clicked_function = [lambda i = i: self.clickedProgrammButton(i) for i in xrange(len(self.programmButtons))]
 #       rightclicked_function = [lambda i = i: self.rightclickedProgrammButton(i) for i in xrange(len(self.programmButtons))]
@@ -104,6 +136,7 @@ class SIPPhone(QtGui.QMainWindow):
         # запомнили картинку по умолчантю
         self.defPixmap = self.infoFoto.pixmap()
 
+        self.subscribes = []
         # инициализаируем конфигурацию
         self.cfgInit()
         self.sip = SIP(self)
@@ -132,7 +165,7 @@ class SIPPhone(QtGui.QMainWindow):
         self.listCall.clicked.connect(self.onListCallClicked)
         self.listCall.doubleClicked.connect(self.onListCallDblClicked)
 
-
+        
         #self.setCentralWidget(self.pushButton_CmdTransfer)
 
         # сздаем doc window
@@ -165,6 +198,7 @@ class SIPPhone(QtGui.QMainWindow):
         except:
             self.cfg["buttons"] = {}      # номера на кнопках
             self.cfg["name"] = {}         # имена на кнопках
+            self.cfg["subscribe"] = {}    # подписыки кнопок
             self.cfg["username"] = ""     # имя пользователя
             self.cfg["registrator"] = ""  # где регистрируемся
 
@@ -176,6 +210,8 @@ class SIPPhone(QtGui.QMainWindow):
 
         self.setCurrentCall(None)
         self.statusBar.showMessage("Disconnected")
+        
+
 
     def setCurrentCall(self, call):
         self.currentCall = call
@@ -255,33 +291,116 @@ class SIPPhone(QtGui.QMainWindow):
         if callNumber:
             editWidget.setText(callNumber)
 
+        checkWidget = QtGui.QCheckBox("Subscribe")
+        #checkWidget.setFocusPolicy(QtCore.Qt.NoFocus)
+        subscribed = self.getSubscribeProgrammButton(programmButton.numberButton)
+        subscribed = False if (callNumber is None) else False if len(callNumber) == 0 else subscribed
+#        if callNumber is None:
+#            subscribed = False
+#        else:
+#            if len(callNumber) == 0:
+#                subscribed = False
+ 
+        if subscribed:
+            checkWidget.setChecked(subscribed)
         # создаем контекстное меню
         menu = QtGui.QMenu()
 
         # создаем action для добавления в меню
-        wac = QtGui.QWidgetAction(menu)
-        wac.setDefaultWidget(editWidget)
+        editWAC = QtGui.QWidgetAction(menu)
+        editWAC.setDefaultWidget(editWidget)
+
+        checkWAC = QtGui.QWidgetAction(menu)
+        checkWAC.setDefaultWidget(checkWidget)
 
         # добаляем созданый action в меню
-        menu.addAction(wac)
+        menu.addAction(editWAC)
+        menu.addAction(checkWAC)
 
-
-        def editOk(menu, edit, numberButton):
+        def editOk(menu, edit, check, numberButton):
             """
             обработчик нажатия enter на QLineEdit в меню, возможно криво, по другому не придумал
             """
             # сохраняем введенный текст в нашей конфиге
+            #print self.cfg["buttons"]
+            if len(edit.text().__str__()) != 0:
+                for num in self.cfg["buttons"]:
+                    if num == numberButton:
+                        continue
+                    
+                    if self.cfg["buttons"][num] == edit.text().__str__():
+                        #print num, numberButton
+                        self.statusBar.showMessage("Number exist")
+                        edit.setText("")
+                        menu.close()
+                        return
+
             if not self.cfg.has_key("buttons"):
                 self.cfg["buttons"] = {}
             self.cfg["buttons"][numberButton] = edit.text().__str__()
+            if not self.cfg.has_key("subscribe"):
+                self.cfg["subscribe"] = {}
+            if self.cfg["buttons"][numberButton] != "":
+                self.cfg["subscribe"][numberButton] =  check.isChecked()
             menu.close()
             self.saveCfg()
+            
 
         # связываем обработчик и сигнал
-        QtCore.QObject.connect(editWidget, QtCore.SIGNAL("returnPressed()"), lambda:editOk(menu, editWidget, programmButton.numberButton))
-
+        QtCore.QObject.connect(editWidget, QtCore.SIGNAL("returnPressed()"), lambda:editOk(menu, editWidget, checkWidget, programmButton.numberButton))
         # открываем меню
-        menu.exec_(programmButton.mapToGlobal(position))
+        subscribed = self.getSubscribeProgrammButton(programmButton.numberButton)
+        if not menu.exec_(programmButton.mapToGlobal(position)) is None:
+            editOk(menu, editWidget, checkWidget, programmButton.numberButton)
+        
+        # тут изменяем состояниме подписки
+        if subscribed != self.getSubscribeProgrammButton(programmButton.numberButton):
+            self.subscribe(programmButton.numberButton, self.getSubscribeProgrammButton(programmButton.numberButton))
+
+        # по базе найдем имя
+        if not editWidget.text().isEmpty():
+            try:
+                self.cfg["name"][programmButton.numberButton]
+                if len(self.cfg["name"][programmButton.numberButton]) != 0:
+                    return
+            except KeyError:
+                pass
+            info = recordbookWindow.getInfoByNumber(editWidget.text().__str__())
+            if info:
+                self.cfg["name"][programmButton.numberButton] = info["name"]
+                self.programmButtonsLabel[programmButton.numberButton].setText(info["name"])
+                self.saveCfg()
+
+
+    def subscribe(self, number, subsicribe):
+        """ number - номер кнопки
+            subsicribe - состояние подписки, подписать/отписать
+        """
+        if not self.sip.account:
+            return
+
+        num = self.getCallNumberProgrammButton(number)
+        #print self.sip.account.enum_event_dialogs()
+        if num:
+            subsnumber = str("sip:" + num + "@" + self.cfg["registrator"])
+            id_event_dialog = -1 #self.sip.account.find_event_dialog(subsnumber)
+            # желание подписаться
+            if subsicribe:
+                if id_event_dialog >= 0: # уже подписан
+                    return
+                cb = SIPEventDialogCallBack(self.programmButtons[number])
+                eventdialog = self.sip.account.add_event_dialog(subsnumber, cb)
+                eventdialog.set_callback(cb)
+                eventdialog.subscribe()
+                self.subscribes[number] = eventdialog
+            else:
+                if self.subscribes[number]:
+                    self.subscribes[number].unsubscribe()
+                    self.subscribes[number].delete()                    
+
+                self.subscribes[number] = None
+
+                #print self.sip.account.find_event_dialog(subsnumber)
 
 
     def getCfgPropertyStr(self, propertyName):
@@ -309,6 +428,13 @@ class SIPPhone(QtGui.QMainWindow):
         """
         return self.getProgrammButtonValue(numberButton, "buttons")
 
+
+    def getSubscribeProgrammButton(self, numberButton):
+        """
+        метод возвращает подписку кнопки
+        None если на кнопке ни чего не прописано
+        """
+        return self.getProgrammButtonValue(numberButton, "subscribe")
 
     def getProgrammButtonValue(self, numberButton, keyName):
         """
@@ -468,7 +594,6 @@ class SIPPhone(QtGui.QMainWindow):
         """
         добавляет вызов call в список под индексом callid
         """
-       
         index = self.lm.index(callid)
         self.lm.setData(index, call, QtCore.Qt.EditRole)
 
@@ -488,7 +613,6 @@ class SIPPhone(QtGui.QMainWindow):
         метод инициализируем вызов по SIP
         """
         # тут вписываемся для звонка
-
         if len(self.number):
             self.lineEditDisplay.setText("Dial to :" + self.number)
             if self.sip.account is None:
@@ -668,9 +792,36 @@ class SIPPhone(QtGui.QMainWindow):
         self.lineEditDisplay.setText(self.number)
 
 
-    def register(self, value = None):
+    def subscribing(self):
         """
-        метод обработчик нажатия на кнопку register
+        """
+        for i in xrange(0, len(self.programmButtons)):
+            if self.programmButtons[i].numberButton >= 0:
+                self.subscribes.insert(i, None)
+
+        if self.cfg.has_key("subscribe"):
+            for i in xrange(0, len(self.programmButtons)):
+                try:
+                    self.subscribe(i, self.cfg["subscribe"][i])
+                except KeyError:
+                    continue
+
+        # автоматиечски подпишем тех кто должен быть прописан
+
+    def unsubscribing(self):
+        """ удаляет подписки
+        """
+        if self.cfg.has_key("subscribe"):
+            for i in xrange(0, len(self.programmButtons)):
+                try:
+                    self.subscribe(i, False)
+                except KeyError:
+                    continue
+
+        self.subscribes = []
+
+    def register(self, value = None):
+        """ метод обработчик нажатия на кнопку register
         начинает процесс регистрации sip абонента
         через value передается состояние регистрации необъодимое для установления
         возвращает успешнсть регистрации
@@ -681,12 +832,14 @@ class SIPPhone(QtGui.QMainWindow):
         else: value = not value
 
         if value:
+            self.unsubscribing()
             self.sip.delete_account()
             self.pushButton_CmdRegister.statusLed = False
         else:
             if len(self.cfg["registrator"]):
                 if self.sip.create_account(self.cfg):
                     self.pushButton_CmdRegister.statusLed = True
+                    self.subscribing()
                 else:
                     self.pushButton_CmdRegister.statusLed = False
 
